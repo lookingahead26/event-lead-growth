@@ -1203,6 +1203,32 @@
             </div>
         </div>
     </div>
+
+    <!-- PRÉVIA DE DRE -->
+    <div style="margin-top: 28px;">
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; overflow:hidden; max-width: 560px;">
+            <div style="padding:16px 20px 10px;">
+                <div style="font-size:13px; font-weight:700; color:var(--t1); margin-bottom:4px;">Prévia de DRE — Projeção Mensal</div>
+                <div id="prev-subtitle" style="font-size:11px; color:var(--t3);">— eventos/mês · Ticket médio —</div>
+            </div>
+            <div style="border-top:1px solid var(--border);">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-bottom:1px solid rgba(255,255,255,0.04);">
+                    <span style="font-size:12px; color:var(--t2);">(+) Receita Bruta Projetada <span id="prev-receita-detalhe" style="font-size:10px; color:var(--t3);"></span></span>
+                    <span id="prev-receita" style="font-size:13px; font-weight:700; color:var(--t1); font-variant-numeric:tabular-nums;">—</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-bottom:1px solid rgba(255,255,255,0.04);">
+                    <span style="font-size:12px; color:var(--t2);">(–) Custos de Produção e Operação <span id="prev-custo-detalhe" style="font-size:10px; color:var(--t3);"></span></span>
+                    <span id="prev-custos" style="font-size:13px; font-weight:700; color:#E8834A; font-variant-numeric:tabular-nums;">—</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:rgba(200,16,46,0.06);">
+                    <span style="font-size:13px; font-weight:700; color:var(--t1);">Lucro Bruto Operacional <span id="prev-margem-tag" style="display:inline-block; background:rgba(255,255,255,0.08); color:var(--t2); font-size:10px; font-weight:700; padding:2px 10px; border-radius:4px; margin-left:8px;">—%</span></span>
+                    <span id="prev-lucro" style="font-size:16px; font-weight:700; color:var(--accent); font-variant-numeric:tabular-nums;">—</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
 </section>
 
 <!-- ═══════════════════════ TOC ═══════════════════════ -->
@@ -1495,7 +1521,9 @@
         document.getElementById('res-comissao').textContent  = '− ' + fmt(comissaoVal);
         document.getElementById('res-headcount').textContent = '− ' + fmt(totalHC);
         document.getElementById('res-lucro').textContent     = fmt(lucro);
+        document.getElementById('res-lucro').style.color     = lucro >= 0 ? '#4CAF50' : '#C8102E';
         document.getElementById('res-margem').textContent    = pct(margem);
+        document.getElementById('res-margem').style.color    = lucro >= 0 ? '#4CAF50' : '#C8102E';
 
         document.getElementById('ind-custo-evento').textContent = fmt(custoPorEvento);
         document.getElementById('ind-lucro-evento').textContent = fmt(lucroPorEvento);
@@ -1503,6 +1531,18 @@
         document.getElementById('ind-anual').textContent        = fmt(receitaBruta * 12);
         document.getElementById('ind-hc-total').textContent     = fmt(totalHC);
         document.getElementById('ind-hc-evento').textContent    = fmt(hcPorEvento);
+
+        // ── PRÉVIA DE DRE ──
+        const totalCustosPrevia = totalAB + totalAV + totalMat + totalCRM + trafego + comissaoVal + impostoVal + totalHC;
+        document.getElementById('prev-subtitle').textContent        = eventos + ' evento' + (eventos !== 1 ? 's' : '') + '/mês · Ticket médio ' + fmt(ticket);
+        document.getElementById('prev-receita-detalhe').textContent = '(' + eventos + ' × ' + fmt(ticket) + ')';
+        document.getElementById('prev-receita').textContent         = fmt(receitaBruta);
+        document.getElementById('prev-custo-detalhe').textContent   = '(teto: ' + fmt(custoPorEvento) + '/evento)';
+        document.getElementById('prev-custos').textContent          = '− ' + fmt(totalCustosPrevia);
+        document.getElementById('prev-lucro').textContent           = fmt(lucro);
+        document.getElementById('prev-lucro').style.color           = lucro >= 0 ? '#4CAF50' : '#C8102E';
+        document.getElementById('prev-margem-tag').textContent      = pct(margem) + ' de margem';
+        document.getElementById('prev-margem-tag').style.color      = lucro >= 0 ? '#4CAF50' : '#C8102E';
     }
 
     const scenarios = {
